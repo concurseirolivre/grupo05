@@ -1,646 +1,85 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Simulação ATS - Grupo 5</title>
-    <style>
-        /* --- GERAL --- */
-        :root{
-            --bg:#050505;
-            --card:#141418;
-            --accent:#2196F3;
-            --danger:#ff3d00;
-            --warning:#FFEB3B;
-            --text:#e0e0e0;
-        }
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Courier New', Courier, monospace;
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            box-sizing: border-box;
-        }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Simulação ATS - Estética Retro/Horror - Grupo 5</title>
+<style>
+/* ===========================
+   RETRO / HORROR AESTHETIC
+   =========================== */
+:root{
+  --bg:#050202;
+  --panel:#0e0d0f;
+  --accent:#66ffcc;
+  --accent-2:#ff6b6b;
+  --warn:#ffb86b;
+  --text:#dcdcdc;
+  --crt-glow: rgba(100,255,180,0.06);
+}
+html,body{height:100%;margin:0;background:#050202;font-family: "Courier New", monospace;color:var(--text);overflow:hidden;}
+.background-fixed{position:fixed; inset:0; background-image:url('retro-bg.jpg'); background-size:cover; background-position:center; filter:brightness(.25) contrast(1.1); z-index:-10;}
 
-        /* FUNDOS */
-        .background-fixed {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-size: cover;
-            background-position: center;
-            z-index: -5;
-            transition: all 1s ease;
-        }
-        .bg-prologue { filter: brightness(0.4) contrast(1.1); transition: background-image 0.5s ease; }
-        .bg-game { background-image: url('img1.jpg'); filter: brightness(0.3) contrast(1.2) blur(2px); }
+/* SCANLINES / CRT */
+.crt-overlay{
+  position:fixed; inset:0; pointer-events:none; mix-blend-mode:overlay; z-index:1200;
+  background-image: linear-gradient(rgba(0,0,0,0) 49%, rgba(0,0,0,0.05) 50%, rgba(0,0,0,0) 51%);
+  background-size: 100% 4px;
+  animation: subtleFlicker 6s steps(2) infinite;
+}
+@keyframes subtleFlicker { 0%{opacity:.98}50%{opacity:.92}100%{opacity:.98} }
 
-        /* DISASTER LAYER */
-        #disaster-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 900; display: none; }
-        .rain { position: absolute; background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0.5)); width: 2px; height: 50px; top: -60px; border-radius: 2px; pointer-events: none; }
-        .fire-particle { position: absolute; background: radial-gradient(circle, rgba(255,80,0,0.8) 0%, rgba(255,0,0,0) 70%); border-radius: 50%; bottom: -50px; pointer-events: none; filter: blur(4px); mix-blend-mode: screen; }
+/* VHS noise */
+.vhs-noise{
+  position:fixed; inset:0; pointer-events:none; z-index:1190; background:transparent;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><filter id="g"><feTurbulence baseFrequency="0.9" numOctaves="1" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(%23g)" opacity="0.02" fill="white"/></svg>');
+  mix-blend-mode:screen; opacity:0.08;
+  animation: noiseJitter 1.2s steps(2) infinite;
+}
+@keyframes noiseJitter { 0%{transform:translateY(0)}50%{transform:translateY(1px)}100%{transform:translateY(0)} }
 
-        .shake-screen { animation: shake 3s cubic-bezier(.36,.07,.19,.97) infinite; }
-        @keyframes rain-fall { to { transform: translateY(120vh); } }
-        @keyframes rise { 0% { transform: translateY(0) scale(1); opacity: 0.8; } 100% { transform: translateY(-80vh) scale(0); opacity: 0; } }
-        @keyframes shake {
-            10%, 90% { transform: translate3d(-1px, 0, 0); }
-            20%, 80% { transform: translate3d(1px, 0, 0); }
-            30%, 50%, 70% { transform: translate3d(-2px, 0, 0); }
-            40%, 60% { transform: translate3d(2px, 0, 0); }
-        }
+/* GLITCH title */
+.glitch {
+  position:relative; display:inline-block; color:var(--warn);
+  text-transform:uppercase; letter-spacing:3px; font-weight:700;
+}
+.glitch::before, .glitch::after{
+  content:attr(data-text);
+  position:absolute; left:0; top:0; width:100%;
+  clip:rect(0,900px,0,0);
+}
+.glitch::before{ left:2px; text-shadow:-2px 0 var(--accent); animation:glitchTop .8s infinite linear; }
+.glitch::after{ left:-2px; text-shadow:2px 0 var(--accent-2); animation:glitchBottom .9s infinite linear; }
+@keyframes glitchTop { 0%{clip:rect(0,900px,10px,0)} 50%{clip:rect(0,900px,45px,0)} 100%{clip:rect(0,900px,10px,0)} }
+@keyframes glitchBottom { 0%{clip:rect(40px,900px,90px,0)} 50%{clip:rect(20px,900px,60px,0)} 100%{clip:rect(40px,900px,90px,0)} }
 
-        /* PROLOGO */
-        #prologue-container { width: 90%; max-width: 900px; background-color: rgba(20, 20, 25, 0.95); border: 1px solid #444; border-top: 5px solid var(--accent); border-radius: 8px; padding: 40px; box-shadow: 0 0 50px rgba(0, 0, 0, 0.9); display: flex; flex-direction: column; align-items: center; text-align: center; z-index: 1000; animation: fadeIn 1s; position: relative; }
-        #prologue-title { color: var(--accent); font-size: 1.5em; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; width: 100%; }
-        #prologue-text { font-size: 1.3em; line-height: 1.6; min-height: 200px; white-space: pre-wrap; margin-bottom: 30px; text-align: left; color: #fff; }
-        .nav-buttons { display: flex; gap: 20px; width: 100%; justify-content: space-between; align-items: center; }
-        .btn-prologue { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 10px 30px; font-size: 1em; cursor: pointer; transition: all 0.3s; font-family: inherit; }
-        .btn-prologue:hover { background: var(--accent); color: white; }
+/* SCREEN CONTAINER */
+.app {
+  position:relative;
+  width: 100vw;
+  height: 100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:28px;
+  box-sizing:border-box;
+}
 
-        /* INTRO / ALERT */
-        #intro-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); z-index: 2000; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; opacity: 0; }
-        #intro-content h1 { color: #ff3d00; font-size: 4em; margin-bottom: 0; text-transform: uppercase; text-shadow: 0 0 20px rgba(255, 61, 0, 0.8); animation: pulse 1.5s infinite; letter-spacing: 5px; }
-        #btn-start-simulation { background: transparent; border: 3px solid var(--danger); color: var(--danger); padding: 20px 50px; font-size: 1.8em; font-family: inherit; font-weight: bold; cursor: pointer; margin-top: 50px; transition: all 0.3s; text-transform: uppercase; animation: borderPulse 2s infinite; }
-        #btn-start-simulation:hover { background-color: var(--danger); color: #000; box-shadow: 0 0 30px var(--danger); }
+/* CORE CARD (center) */
+.center-card{
+  width: 92%;
+  max-width: 1100px;
+  min-height: 540px;
+  background: linear-gradient(180deg, rgba(10,10,12,0.9), rgba(4,4,6,0.98));
+  border-radius:10px; padding:18px; box-shadow: 0 12px 60px rgba(0,0,0,0.8); border:1px solid rgba(255,255,255,0.03);
+  display:flex; gap:14px; flex-direction:column; z-index:100;
+  position:relative; overflow:hidden;
+}
 
-        /* JOGO */
-        #game-container { width: 95%; max-width: 1100px; background-color: rgba(20, 20, 20, 0.95); border: 1px solid #444; border-left: 5px solid #d32f2f; border-radius: 8px; padding: 20px; box-shadow: 0 0 30px rgba(0, 0, 0, 0.8); min-height: 420px; display: none; flex-direction: column; opacity: 0; z-index: 500; gap:12px; }
-        .header { border-bottom: 1px solid #555; padding-bottom: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; font-size: 0.95em; color: #888; align-items:center; gap:10px; }
-        .status-blink { color: #d32f2f; font-weight: bold; animation: blink 1s infinite; }
-
-        #feedback-area { margin-bottom: 8px; font-weight: bold; padding: 12px; border-radius: 4px; display: none; font-size: 1.05em; }
-        .feedback-success { background-color: rgba(46, 125, 50, 0.18); border: 1px solid #2e7d32; color: #81c784; }
-        .feedback-error { background-color: rgba(198, 40, 40, 0.18); border: 1px solid #c62828; color: #e57373; }
-
-        #text-container { display:flex; gap:12px; align-items:flex-start; width:100%; }
-        #story-text { font-size: 1.08em; line-height: 1.5; white-space: pre-wrap; min-height: 120px; flex:1; }
-        #story-text[aria-live] { outline: none; } /* acessibilidade */
-
-        .cursor { display: inline-block; width: 10px; height: 1em; background-color: #0f0; animation: blink 1s infinite; vertical-align: bottom; margin-left:6px; }
-
-        .choices { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; opacity: 0; transition: opacity 0.5s; width:100%; }
-        .btn { background: transparent; border: 1px dashed var(--warning); color: var(--warning); padding: 12px; text-align: left; font-family: inherit; font-size: 1.05em; cursor: pointer; transition: all 0.15s; }
-        .btn:hover { background-color: var(--warning); color: #000; border-style: solid; transform: translateX(5px); }
-        .btn:focus { outline: 3px solid rgba(255,235,59,0.25); transform: translateX(3px); }
-
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.05); opacity: 0.8; } 100% { transform: scale(1); opacity: 1; } }
-        @keyframes borderPulse { 0% { box-shadow: 0 0 0 0 rgba(255, 61, 0, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(255, 61, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 61, 0, 0); } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* --- NOVO: HUD --- */
-        #hud {
-            position: fixed;
-            top: 18px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(10,10,12,0.7);
-            padding: 8px 16px;
-            border-radius: 999px;
-            display:flex;
-            gap:18px;
-            align-items:center;
-            z-index: 3000;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.6);
-            font-size: .95rem;
-        }
-        #hud .hud-item{ display:flex; gap:8px; align-items:center; color:#ddd; }
-        #hud .alert-green{ color:#66bb6a; font-weight:700; }
-        #hud .alert-amber{ color:#ffb300; font-weight:700; }
-        #hud .alert-red{ color:#ef5350; font-weight:700; }
-
-        /* --- NOVO: PATIENT CARDS (FICHAS) --- */
-        #patient-area {
-            width: 360px;
-            max-height: 320px;
-            overflow:auto;
-            background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(0,0,0,0.06));
-            border: 1px solid rgba(255,255,255,0.03);
-            border-radius: 8px;
-            padding:8px;
-            display:flex;
-            flex-direction:column;
-            gap:8px;
-        }
-        .patient-card{
-            background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.08));
-            border: 1px solid rgba(255,255,255,0.04);
-            padding: 10px;
-            border-radius: 8px;
-            display:flex;
-            flex-direction:column;
-            gap:8px;
-        }
-        .patient-head{ display:flex; gap:10px; align-items:center; }
-        .patient-avatar{ width:48px; height:48px; border-radius:8px; object-fit:cover; background:#222; }
-        .patient-name{ font-weight:700; color:#fff; }
-        .patient-meta{ font-size:0.85rem; color:#bbb; }
-        .vitals{ display:flex; gap:10px; font-size:0.95rem; color:#ddd; }
-        .vital b{ color:#fff; }
-        .patient-actions{ display:flex; gap:8px; justify-content:flex-end; }
-        .btn.small{ padding:6px 10px; font-size:.9rem; border-radius:6px; }
-        .triage-tag{ font-weight:700; padding:6px 8px; border-radius:6px; width:max-content; color:#fff; transform: translateY(0); transition: transform .15s ease, box-shadow .15s ease; }
-        .triage-green{ background:#2e7d32; box-shadow: 0 6px 18px rgba(46,125,50,0.12); }
-        .triage-amber{ background:#ffb300; color:#000; box-shadow: 0 6px 18px rgba(255,179,0,0.12); }
-        .triage-red{ background:#c62828; box-shadow: 0 6px 18px rgba(198,40,40,0.12); }
-        .triage-black{ background:#111; color:#aaa; box-shadow: 0 6px 18px rgba(0,0,0,0.25); }
-
-        /* animação de pop da triagem */
-        @keyframes triagePop {
-            0% { transform: scale(.92) translateY(0); opacity: .6; }
-            60% { transform: scale(1.08) translateY(-6px); opacity: 1; }
-            100% { transform: scale(1) translateY(0); opacity: 1; }
-        }
-        .triage-animate { animation: triagePop .45s ease-out; }
-
-        /* reduced motion respect */
-        @media (prefers-reduced-motion: reduce) {
-            * { transition: none !important; animation: none !important; }
-            .choices { transition: none; }
-            .cursor { animation: none; opacity: 1; }
-            #disaster-layer { display:none !important; }
-        }
-
-        /* responsividade */
-        @media (max-width: 900px) {
-            #patient-area{ width: 100%; max-height: 220px; }
-            #game-container{ padding: 14px; }
-            #hud{ left: 12px; transform:none; top:12px; }
-            #text-container{ flex-direction: column; gap: 12px; }
-        }
-    </style>
-</head>
-<body>
-    <div class="background-fixed bg-prologue" id="main-bg"></div>
-    <div id="disaster-layer" aria-hidden="true"></div>
-
-    <!-- Áudios -->
-    <audio id="audio-prologue" preload="auto"></audio>
-    <audio id="audio-news" src="noticia.mp3" preload="auto"></audio>
-    <audio id="audio-game" src="audio.mp3" preload="auto"></audio>
-
-    <!-- PROLOGO -->
-    <div id="prologue-container" role="region" aria-label="Prólogo">
-        <div id="prologue-title">INTRODUÇÃO TÉCNICA</div>
-        <div id="prologue-text"></div>
-        <div class="nav-buttons">
-            <button class="btn-prologue" id="btn-prev-prologue" style="visibility: hidden;">Anterior</button>
-            <button class="btn-prologue" id="btn-play-pause" style="min-width: 160px;">⏯️ Play</button>
-            <button class="btn-prologue" id="btn-next-prologue">Próximo ➜</button>
-        </div>
-    </div>
-
-    <!-- INTRO / ALERT -->
-    <div id="intro-screen">
-        <div id="intro-content">
-            <h1>ATENÇÃO</h1>
-            <h2>SITUAÇÃO DE DESASTRE EM ANDAMENTO</h2>
-            <h2>AÇÃO IMEDIATA NECESSÁRIA</h2>
-            <button id="btn-start-simulation">INICIAR OPERAÇÃO</button>
-        </div>
-    </div>
-
-    <!-- HUD (novo) -->
-    <div id="hud" aria-hidden="false" role="status" aria-live="polite" style="display:none;">
-        <div class="hud-item"><strong>Hora:</strong>&nbsp;<span id="hud-time">06:05</span></div>
-        <div class="hud-item"><strong>Equipes:</strong>&nbsp;<span id="hud-teams">10</span></div>
-        <div class="hud-item"><strong>Alerta:</strong>&nbsp;<span id="hud-alert" class="alert-amber">Moderado</span></div>
-        <div class="hud-item"><button class="btn" onclick="openTimeline()" aria-label="Abrir timeline">Timeline</button></div>
-    </div>
-
-    <!-- JOGO -->
-    <div id="game-container" role="main" aria-label="Sala de Situação">
-        <div class="header">
-            <span>SALA DE SITUAÇÃO: GRUPO 5</span>
-            <span class="status-blink">● AO VIVO - PETRÓPOLIS</span>
-        </div>
-
-        <div id="feedback-area" role="alert"></div>
-
-        <div id="text-container">
-            <div style="flex:1;">
-                <div id="story-text" aria-live="polite" tabindex="-1"></div><span class="cursor" aria-hidden="true"></span>
-                <div id="choices-container" class="choices" role="list"></div>
-            </div>
-
-            <!-- --- NOVO: patient-area à direita --- -->
-            <div id="patient-area" aria-label="Área de Pacientes">
-                <!-- cartões gerados dinamicamente -->
-            </div>
-        </div>
-    </div>
-
-<script>
-    // --- REFERÊNCIAS ---
-    const prologueContainer = document.getElementById('prologue-container');
-    const introScreen = document.getElementById('intro-screen');
-    const gameContainer = document.getElementById('game-container');
-    const mainBg = document.getElementById('main-bg');
-    const disasterLayer = document.getElementById('disaster-layer');
-    const hud = document.getElementById('hud');
-
-    // Áudios
-    const audioPrologue = document.getElementById('audio-prologue');
-    const audioNews = document.getElementById('audio-news');
-    const audioGame = document.getElementById('audio-game');
-
-    // Botões
-    const btnPlayPause = document.getElementById('btn-play-pause');
-    const btnNext = document.getElementById('btn-next-prologue');
-    const btnPrev = document.getElementById('btn-prev-prologue');
-    const btnStartSim = document.getElementById('btn-start-simulation');
-
-    // HUD elements
-    const hudTime = document.getElementById('hud-time');
-    const hudTeams = document.getElementById('hud-teams');
-    const hudAlert = document.getElementById('hud-alert');
-
-    // Narrativa e controle
-    let currentPrologueIndex = 0;
-    let isFirstInteraction = true;
-    let disasterInterval;
-    let currentStage = 'prologue'; // 'prologue' | 'intro' | 'game'
-
-    // --- DADOS DO PRÓLOGO (mantive os dados) ---
-    const prologueData = [
-        { title: "INÍCIO", text: "\"Quando um desastre acontece — seja um deslizamento, um incêndio ou uma enchente — o caos domina os primeiros minutos.\n\nMas existe uma lógica médica por trás das decisões que salvam vidas. Hoje você vai entender como funciona a atuação do médico em cenários de desastre.\"", img: "https://www.pragmatismopolitico.com.br/wp-content/uploads/2018/05/acidente-cuba-e1527030296940.jpg", audio: "audio1.mp3", effectType: 'rain' },
-        { title: "O PAPEL DO MÉDICO", text: "\"Um desastre é qualquer evento que ultrapassa a capacidade normal de resposta.\n\nO médico precisa entender fisiologia, toxicologia e epidemiologia. É aqui que entram conceitos como triagem, manejo de vias aéreas e tomada de decisão rápida quando não há recursos para todos.\"", img: "https://images.unsplash.com/photo-1584036561566-baf8f5f1b144?auto=format&fit=crop&w=1920&q=80", audio: "audio2.mp3" },
-        { title: "TRIAGEM (MÉTODO START)", text: "\"A triagem é o coração da resposta médica. É nela que o médico define quem precisa de intervenção imediata.\n\nO método START baseia-se em:\n• Respiração (>30rpm = Vermelho)\n• Perfusão (>2s = Choque)\n• Estado mental (Não obedece comandos = Hipóxia)\"", img: "https://images.unsplash.com/photo-1516574187841-69301976e49e?auto=format&fit=crop&w=1920&q=80", audio: "audio3.mp3" },
-        { title: "SITUAÇÕES SIMPLES", text: "\"A maioria das demandas são simples: ferimentos leves, ansiedade, desidratação.\n\nO médico atua como estabilizador: hidratação oral, suturas, analgésicos e controle de hipertensão por estresse em vulneráveis.\"", img: "https://www.saude.sp.gov.br/resources/hospital-leonor-mendes-de-barros/acesso-rapido/primeiros-socorros-em-caso-de-incendio.jpg", audio: "audio4.mp3" },
-        { title: "ALTA COMPLEXIDADE", text: "\"Em incêndios: Intoxicação por monóxido de carbono.\nEm deslizamentos: Síndrome do Esmagamento (liberação de mioglobina e potássio, risco renal e arritmias).\n\nDecisões baseadas em fisiologia e protocolos.\"", img: "https://ogimg.infoglobo.com.br/in/23946251-8e9-d10/FT1086A/GettyImages-56441651.jpg", audio: "audio5.mp3", effectType: 'fire' },
-        { title: "LOGÍSTICA E LIDERANÇA", text: "\"O médico coordena fluxos e conversa com bombeiros e defesa civil.\n\nNo abrigo, o trabalho continua: vigilância epidemiológica, prevenção de surtos, vacinação e controle da água.\"", img: "https://cdn.folhape.com.br/img/c/1200/900/dn_arquivo/2020/01/medico1.jpg", audio: "audio6.mp3" },
-        { title: "A ESSÊNCIA", text: "\"No fim, atuar em um desastre é equilibrar ciência, humanidade e estratégia.\n\nA medicina nesses cenários não é apenas técnica; exige também coragem e organização quando tudo ao redor parece destruído.\"", img: "https://blog.unyleyamed.com.br/wp-content/uploads/2023/09/shutterstock_661890763-scaled.webp", audio: "audio7.mp3" }
-    ];
-
-    /* --- NOVO: dados de pacientes (exemplo inicial) --- */
-    let teamsAvailable = 10;
-    const samplePatients = [
-        { id: 'p1', name: 'Feminina, 32a', arrival: '06:08', triage: 'red', hr: 128, spo2: 86, bp: '86/54', note: 'Ferida extensa, respiraçao ruidosa.' },
-        { id: 'p2', name: 'Masculino, 45a', arrival: '06:10', triage: 'amber', hr: 98, spo2: 94, bp: '110/70', note: 'Escoriações, dor abdominal.' },
-        { id: 'p3', name: 'Feminina, 68a', arrival: '06:12', triage: 'green', hr: 82, spo2: 97, bp: '130/78', note: 'Ansiedade, hipotermia leve.' },
-        { id: 'p4', name: 'Masculino, 20a', arrival: '06:20', triage: 'black', hr: 0, spo2: 0, bp: '0/0', note: 'Sem pulso, sem respiração.' }
-    ];
-
-    // referências DOM paciente
-    const patientArea = document.getElementById('patient-area');
-
-    // --- FUNÇÕES DE EFEITO VISUAL (mantidas) ---
-    function startDisasterEffect(type) {
-        disasterLayer.style.display = 'block';
-        disasterLayer.innerHTML = '';
-        clearInterval(disasterInterval);
-        if (type === 'rain') {
-            prologueContainer.classList.add('shake-screen');
-            disasterInterval = setInterval(() => {
-                for(let i=0;i<4;i++){
-                    const drop = document.createElement('div');
-                    drop.className='rain';
-                    drop.style.left = Math.random()*100 + 'vw';
-                    drop.style.height = (Math.random()*20+30)+'px';
-                    const speed = Math.random()*0.7+0.8;
-                    drop.style.animation = `rain-fall ${speed}s linear`;
-                    disasterLayer.appendChild(drop);
-                    setTimeout(()=>drop.remove(), speed*1000);
-                }
-            },50);
-        } else if (type === 'fire') {
-            prologueContainer.classList.remove('shake-screen');
-            disasterInterval = setInterval(()=> {
-                for(let i=0;i<3;i++){
-                    const ember = document.createElement('div');
-                    ember.className='fire-particle';
-                    ember.style.left = Math.random()*100 + 'vw';
-                    ember.style.width = (Math.random()*20+5)+'px';
-                    ember.style.height = ember.style.width;
-                    const color = Math.random() > 0.5 ? 'rgba(255,80,0,0.85)' : 'rgba(255,200,0,0.6)';
-                    ember.style.background = `radial-gradient(circle, ${color} 0%, rgba(255,0,0,0) 70%)`;
-                    const speed = Math.random()*1.5+1;
-                    ember.style.animation = `rise ${speed}s ease-out forwards`;
-                    disasterLayer.appendChild(ember);
-                    setTimeout(()=>ember.remove(), speed*1000);
-                }
-            },80);
-        }
-    }
-    function stopDisasterEffect(){ clearInterval(disasterInterval); disasterLayer.innerHTML=''; disasterLayer.style.display='none'; prologueContainer.classList.remove('shake-screen'); }
-
-    // --- AUDIO HELPERS (mantidos) ---
-    function loadAndPlayAudioPrologue(sourceUrl) {
-        audioPrologue.src = sourceUrl;
-        audioPrologue.load();
-        if (!isFirstInteraction) {
-            audioPrologue.play().then(()=> updatePlayButtonUI(true)).catch(e=> updatePlayButtonUI(false));
-        } else { updatePlayButtonUI(false); }
-    }
-    function updatePlayButtonUI(isPlaying){
-        if (currentStage === 'prologue') {
-            btnPlayPause.innerText = isPlaying ? "⏸️ Pausar (Prólogo)" : "▶️ Tocar Narração (Prólogo)";
-        } else if (currentStage === 'intro' || currentStage === 'game') {
-            btnPlayPause.innerText = isPlaying ? "⏸️ Pausar (Narração)" : "▶️ Reproduzir (Narração)";
-        } else { btnPlayPause.innerText = "⏯️ Play"; }
-    }
-
-    // --- PROLOGO UPDATE ---
-    function updatePrologue() {
-        currentStage = 'prologue';
-        const data = prologueData[currentPrologueIndex];
-        document.getElementById('prologue-title').innerText = data.title;
-        document.getElementById('prologue-text').innerText = data.text;
-        mainBg.style.backgroundImage = `url('${data.img}')`;
-        if (data.effectType) startDisasterEffect(data.effectType); else stopDisasterEffect();
-        btnPrev.style.visibility = currentPrologueIndex === 0 ? 'hidden' : 'visible';
-        if (currentPrologueIndex === prologueData.length - 1) {
-            btnNext.innerText = "IR PARA AÇÃO ⚠"; btnNext.style.borderColor = "#ff3d00"; btnNext.style.color = "#ff3d00";
-        } else {
-            btnNext.innerText = "Próximo ➜"; btnNext.style.borderColor = "#2196F3"; btnNext.style.color = "#2196F3";
-        }
-        if (data.audio) loadAndPlayAudioPrologue(data.audio); else { audioPrologue.pause(); updatePlayButtonUI(false); }
-    }
-
-    // --- EVENTOS DE CONTROLE (mantidos com melhorias) ---
-    btnPlayPause.addEventListener('click', ()=> {
-        if (isFirstInteraction) isFirstInteraction = false;
-        if (currentStage === 'prologue') {
-            if (!audioPrologue.src) {
-                const data = prologueData[currentPrologueIndex];
-                if (data && data.audio) audioPrologue.src = data.audio;
-            }
-            if (audioPrologue.paused) {
-                audioPrologue.play().then(()=> updatePlayButtonUI(true)).catch(e=> updatePlayButtonUI(false));
-            } else { audioPrologue.pause(); updatePlayButtonUI(false); }
-            return;
-        }
-        if (audioGame.paused) {
-            audioGame.play().then(()=> updatePlayButtonUI(true)).catch(e=> updatePlayButtonUI(false));
-        } else { audioGame.pause(); updatePlayButtonUI(false); }
-    });
-
-    audioPrologue.addEventListener('play', ()=> { if (currentStage === 'prologue') updatePlayButtonUI(true); });
-    audioPrologue.addEventListener('pause', ()=> { if (currentStage === 'prologue') updatePlayButtonUI(false); });
-    audioPrologue.addEventListener('ended', ()=> { if (currentStage === 'prologue') updatePlayButtonUI(false); });
-
-    audioGame.addEventListener('play', ()=> { if (currentStage !== 'prologue') updatePlayButtonUI(true); });
-    audioGame.addEventListener('pause', ()=> { if (currentStage !== 'prologue') updatePlayButtonUI(false); });
-    audioGame.addEventListener('ended', ()=> { if (currentStage !== 'prologue') updatePlayButtonUI(false); });
-
-    // Próximo / Anterior
-    btnNext.addEventListener('click', ()=> {
-        if (isFirstInteraction) isFirstInteraction = false;
-        if (currentPrologueIndex < prologueData.length - 1) { currentPrologueIndex++; updatePrologue(); }
-        else {
-            stopDisasterEffect(); audioPrologue.pause();
-            currentStage = 'intro';
-            audioGame.currentTime = 0;
-            audioGame.play().then(()=> updatePlayButtonUI(true)).catch(e=> updatePlayButtonUI(false));
-            showIntroScreen();
-        }
-    });
-    btnPrev.addEventListener('click', ()=> { if (currentPrologueIndex > 0) { currentPrologueIndex--; updatePrologue(); } });
-
-    // Transição Intro -> Game
-    function showIntroScreen(){
-        prologueContainer.style.display = 'none';
-        mainBg.style.backgroundImage = "url('img1.jpg')";
-        mainBg.className = "background-fixed bg-game";
-        introScreen.style.display = 'flex';
-        setTimeout(()=> introScreen.style.opacity = '1',50);
-    }
-    btnStartSim.addEventListener('click', ()=> {
-        currentStage = 'game';
-        if (audioGame.paused) { audioGame.currentTime = 0; audioGame.play().then(()=>updatePlayButtonUI(true)).catch(e=>updatePlayButtonUI(false)); } else { updatePlayButtonUI(true); }
-        introScreen.style.transition = "opacity 1s"; introScreen.style.opacity = '0';
-        setTimeout(()=> {
-            introScreen.style.display = 'none';
-            gameContainer.style.display = 'flex';
-            hud.style.display = 'flex'; // mostrar HUD
-            setTimeout(()=> { gameContainer.style.opacity = '1'; gameContainer.style.animation = 'fadeIn 1s ease-out'; goTo('start'); }, 100);
-        },1000);
-    });
-
-    // --- MOTOR DO JOGO (story) mantido ---
-    const story = {
-        "start": {
-            text: "[06:05] CONEXÃO ESTABELECIDA COM POSTO DE COMANDO...\n\nO deslizamento acabou de acontecer. A repórter confirmou o caos local. Você é o Coordenador Médico.\n\nRecursos limitados. Vidas em risco.\n\nSua primeira decisão definirá toda a operação. Qual sua prioridade?",
-            choices: [
-                { text: "A - Ir pessoalmente para a Zona de Impacto (Triagem)", target: "erro_gestao" },
-                { text: "B - Focar na Gestão (Posto de Comando)", target: "fase_2" }
-            ]
-        },
-        "erro_gestao": {
-            text: "Você chega à Zona de Impacto e ajuda na triagem. Porém, você ficou incomunicável por 8 horas.\n\nNinguém coordenou os abrigos. O caos se instalou.",
-            feedback: { type: "error", msg: "ERRO DE GESTÃO: Ao focar na emergência (micro), você abdicou da gestão (macro)." },
-            choices: [ { text: "Reiniciar Simulação", target: "start" } ]
-        },
-        "fase_2": {
-            text: "Decisão correta. Do Posto de Comando, você recebe o balanço:\n- 10 equipes médicas disponíveis.\n- Emergência: Múltiplos feridos na lama.\n- Prevenção: 200 desalojados em abrigos precários.\n\nComo você aloca sua equipe?",
-            feedback: { type: "success", msg: "ACERTO: O papel do coordenador é gerenciar recursos." },
-            choices: [
-                { text: "A - 100% das equipes para a Zona de Impacto (Foco nos feridos)", target: "erro_prevencao" },
-                { text: "B - 70% Emergência / 30% Avaliação dos Abrigos", target: "fase_3" }
-            ]
-        },
-        "erro_prevencao": {
-            text: "[18:00] 12 horas se passam. O atendimento aos feridos foi ótimo, mas um surto de vômito e diarreia explodiu nos abrigos (Hepatite A/Cólera).",
-            feedback: { type: "error", msg: "FALHA NA PREVENÇÃO: Você ignorou os abrigos e criou uma segunda crise." },
-            choices: [ { text: "Tentar Novamente", target: "retry_fase_2" }, { text: "Reiniciar do Zero", target: "start" } ]
-        },
-        "fase_3": {
-            text: "[10:00] A equipe de avaliação (30%) retorna com ALERTA VERMELHO:\n\n1. Abrigo Escola: Água parada e lama (Risco Leptospirose).\n2. Abrigo Ginásio: Superlotação e tosse (Risco Respiratório).\n\nQual sua prioridade de Saúde Pública?",
-            feedback: { type: "success", msg: "ACERTO: Dividir a equipe permitiu detectar os riscos a tempo." },
-            choices: [
-                { text: "A - Atacar a Leptospirose (Profilaxia)", target: "erro_clinico" },
-                { text: "B - Atacar o Surto Respiratório (Máscaras)", target: "erro_clinico" },
-                { text: "C - Atacar a Causa Raiz (Articulação Intersetorial)", target: "fase_4" }
-            ]
-        },
-        "erro_clinico": {
-            text: "Você envia insumos médicos. Mas a lama continua lá e a superlotação também.\n\nVocê está enxugando gelo tratando apenas o sintoma.",
-            feedback: { type: "error", msg: "ERRO DE VISÃO: Sem resolver a infraestrutura (Causa Raiz), o remédio não resolve." },
-            choices: [ { text: "Tentar Novamente", target: "retry_fase_3" }, { text: "Reiniciar do Zero", target: "start" } ]
-        },
-        "fase_4": {
-            text: "[11:00] Você tenta contatar a Defesa Civil para pedir água potável e espaço.\n\nO rádio está mudo. \"Dificuldades de comunicação\", como previsto no cenário.\n\nO que você faz?",
-            feedback: { type: "success", msg: "ACERTO: Você identificou que o problema é infraestrutura, não apenas remédio." },
-            choices: [
-                { text: "A - Continuar tentando pelos canais oficiais (Protocolo)", target: "erro_burocracia" },
-                { text: "B - Ir fisicamente ao QG da Defesa Civil (Pró-atividade)", target: "vitoria" }
-            ]
-        },
-        "erro_burocracia": {
-            text: "Você perde 3 horas tentando usar o rádio. Ninguém responde. A janela de oportunidade se fecha e os primeiros casos de febre aparecem.",
-            feedback: { type: "error", msg: "FALHA DE ARTICULAÇÃO: Em desastres, a burocracia colapsa. Esperar é fatal." },
-            choices: [ { text: "Tentar Novamente", target: "retry_fase_4" }, { text: "Reiniciar do Zero", target: "start" } ]
-        },
-        "vitoria": {
-            text: "[11:30] Você vai pessoalmente ao QG. O Comandante da Defesa Civil entende a gravidade.\n\nPLANO CONJUNTO ATIVADO:\n1. Defesa Civil envia caminhão-pipa (Fim do risco Lepto).\n2. Defesa Civil abre anexo do ginásio (Fim do risco Respiratório).\n3. Médicos aplicam profilaxia e isolamento.\n\nCrise Gerenciada.",
-            feedback: { type: "success", msg: "MISSÃO CUMPRIDA: Você resolveu o desafio do Grupo 5." },
-            choices: [ { text: "Reiniciar Apresentação", target: "start" } ]
-        },
-        "retry_fase_2": { text: "[07:00] Voltando à decisão de alocação...\n\nTemos 10 equipes, muitos feridos na lama e 200 desalojados em abrigos.\n\nComo você aloca a equipe?", choices: [ { text: "A - 100% das equipes para a Zona de Impacto", target: "erro_prevencao" }, { text: "B - 70% Emergência / 30% Avaliação dos Abrigos", target: "fase_3" } ] },
-        "retry_fase_3": { text: "[10:00] Reavaliando a estratégia sanitária...\n\nTemos risco de Leptospirose (água parada) e Respiratório (superlotação).\n\nQual sua prioridade?", choices: [ { text: "A - Atacar a Leptospirose (Profilaxia)", target: "erro_clinico" }, { text: "B - Atacar o Surto Respiratório (Máscaras)", target: "erro_clinico" }, { text: "C - Atacar a Causa Raiz (Articulação Intersetorial)", target: "fase_4" } ] },
-        "retry_fase_4": { text: "[11:00] O rádio continua mudo e a Defesa Civil não responde seus chamados.\n\nO tempo está correndo.\n\nO que você faz?", choices: [ { text: "A - Insistir nos canais oficiais (Protocolo)", target: "erro_burocracia" }, { text: "B - Ir fisicamente ao QG da Defesa Civil", target: "vitoria" } ] }
-    };
-
-    const textElement = document.getElementById('story-text');
-    const choicesContainer = document.getElementById('choices-container');
-    const feedbackArea = document.getElementById('feedback-area');
-
-    // typewriter (mantido)
-    function typeWriter(text, i, fnCallback) {
-        if (i < text.length) {
-            textElement.innerHTML = text.substring(0, i+1) + '<span class="cursor" aria-hidden="true"></span>';
-            setTimeout(function() { typeWriter(text, i + 1, fnCallback) }, 12);
-        } else { if (fnCallback) fnCallback(); }
-    }
-
-    // --- NOVO: Render patient cards dinamicamente ---
-    function renderPatientCards(){
-        patientArea.innerHTML = '';
-        samplePatients.forEach(p => {
-            const card = document.createElement('div');
-            card.className = 'patient-card';
-            card.id = p.id;
-            card.setAttribute('role','group');
-            card.setAttribute('aria-label', `Paciente ${p.name} triagem ${p.triage}`);
-            const triClass = p.triage === 'red' ? 'triage-red' : p.triage === 'amber' ? 'triage-amber' : p.triage === 'green' ? 'triage-green' : 'triage-black';
-            card.innerHTML = `
-                <div style="display:flex;justify-content:space-between;align-items:center;">
-                    <div class="triage-tag ${triClass}" id="${p.id}-tag">${p.triage.toUpperCase()}</div>
-                    <div style="font-size:.85rem;color:#bbb">${p.arrival}</div>
-                </div>
-                <div class="patient-head">
-                    <div class="patient-avatar" aria-hidden="true"></div>
-                    <div style="flex:1">
-                        <div class="patient-name">${p.name}</div>
-                        <div class="patient-meta">${p.note}</div>
-                    </div>
-                </div>
-                <div class="vitals">
-                    <span class="vital">FC: <b class="hr">${p.hr}</b></span>
-                    <span class="vital">SpO₂: <b class="spo2">${p.spo2}%</b></span>
-                    <span class="vital">PA: <b class="bp">${p.bp}</b></span>
-                </div>
-                <div class="patient-actions">
-                    <button class="btn small" onclick="openAssessment('${p.id}')" tabindex="0">Avaliar</button>
-                    <button class="btn small" onclick="assignTeam('${p.id}')" tabindex="0">Enviar equipe</button>
-                </div>
-            `;
-            patientArea.appendChild(card);
-        });
-    }
-
-    // adiciona animação de triagem (pop) quando triage muda
-    function animateTriageTag(patientId){
-        const tag = document.getElementById(`${patientId}-tag`);
-        if(!tag) return;
-        tag.classList.remove('triage-animate');
-        void tag.offsetWidth;
-        tag.classList.add('triage-animate');
-    }
-
-    // abrir avaliação (placeholder - aqui você pode criar checklist ABCDE)
-    function openAssessment(patientId){
-        const p = samplePatients.find(x => x.id === patientId);
-        if(!p) return;
-        // foco na área de texto e explicar fisiologia dependendo do caso
-        const explain = `Avaliação rápida de ${p.name} (triagem ${p.triage.toUpperCase()}):\n\n- Situação: ${p.note}\n- Risco imediato: ${p.triage === 'red' ? 'Comprometimento das vias aéreas/choque' : 'Monitorar'}\n\nDica: siga ABCDE. (Simulação: enviar equipe se necessário.)`;
-        // exibir explicação no story-text como pop-up de ensino
-        textElement.innerText = explain;
-        textElement.focus();
-    }
-
-    // atribuir equipe
-    function assignTeam(patientId){
-        if (teamsAvailable <= 0) {
-            alert('Sem equipes disponíveis no momento.');
-            return;
-        }
-        teamsAvailable--;
-        updateHUD();
-        // marcar paciente como assistido: transformar triage para green ou atualizar vitais
-        const p = samplePatients.find(x => x.id === patientId);
-        if(!p) return;
-        p.triage = 'green';
-        p.hr = Math.max(60, Math.round(p.hr * 0.85));
-        p.spo2 = Math.min(99, p.spo2 + 6);
-        animateTriageTag(patientId);
-        renderPatientCards();
-    }
-
-    // --- HUD update (novo) ---
-    function updateHUD(simTime){
-        hudTime.innerText = simTime || hudTime.innerText;
-        hudTeams.innerText = teamsAvailable;
-        // alerta simplificado: se houver paciente vermelho ativo, vermelho
-        const hasRed = samplePatients.some(p => p.triage === 'red');
-        if (hasRed) { hudAlert.className = 'alert-red'; hudAlert.innerText = 'Crítico'; }
-        else { hudAlert.className = 'alert-amber'; hudAlert.innerText = 'Moderado'; }
-    }
-
-    // goTo / motor do jogo (mantido, com chamada a renderPatientCards e updateHUD)
-    function goTo(sceneId) {
-        const scene = story[sceneId];
-        textElement.innerHTML = "";
-        choicesContainer.innerHTML = "";
-        choicesContainer.style.opacity = "0";
-        feedbackArea.style.display = "none";
-
-        if (scene.feedback) {
-            feedbackArea.style.display = "block";
-            feedbackArea.className = scene.feedback.type === 'success' ? 'feedback-success' : 'feedback-error';
-            const icon = scene.feedback.type === 'success' ? '👨‍⚕️👍' : '👨‍⚕️👎';
-            feedbackArea.innerText = icon + " " + scene.feedback.msg;
-        }
-        // atualizar patient cards e HUD sempre que for para start/fase principal
-        if (sceneId === 'start' || sceneId.startsWith('fase')) {
-            renderPatientCards();
-            updateHUD('06:05');
-        }
-
-        typeWriter(scene.text, 0, function() {
-            renderButtons(scene.choices);
-        });
-    }
-
-    function renderButtons(choices) {
-        choices.forEach((choice, idx) => {
-            const btn = document.createElement('button');
-            btn.innerText = choice.text;
-            btn.className = 'btn';
-            btn.setAttribute('role','button');
-            btn.setAttribute('tabindex','0');
-            btn.onclick = function() { goTo(choice.target); };
-            // keyboard support
-            btn.addEventListener('keydown', (e)=> { if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); btn.click(); }});
-            choicesContainer.appendChild(btn);
-        });
-        setTimeout(()=> { choicesContainer.style.opacity = "1"; }, 100);
-    }
-
-    // initial call
-    updatePrologue();
-
-    // acessibilidade extra: focar texto quando abrir game
-    textElement.addEventListener('focus', ()=> { /* espaço para futuras interações */ });
-
-    // funcoes utilitárias (timeline placeholder)
-    function openTimeline(){ alert('Timeline: (em desenvolvimento) - eventos recentes serão exibidos aqui.'); }
-
-    // keyboard global shortcuts (Esc para pausar audio)
-    window.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            if (!audioGame.paused) { audioGame.pause(); updatePlayButtonUI(false); }
-            if (!audioPrologue.paused) { audioPrologue.pause(); updatePlayButtonUI(false); }
-        }
-    });
-</script>
-</body>
-</html>
+/* TOP: header like arcade */
+.header {
+  display:flex; justify-content:space-between; align-items:center; gap:12px;
+  font-size:0.95rem; color:#bbb;
+}
+.header-left{ display:flex; gap:12px; align-items:center; }
+.hud-pill{ background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.05)); padding:6px 12px; bor
