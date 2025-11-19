@@ -3,164 +3,75 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Simulação ATS - Estética Retro/Horror - Grupo 5</title>
+<title>Simulação ATS - Estética Retro/Horror - Grupo 5 (COM START)</title>
 <style>
-/* ===========================
-   RETRO / HORROR AESTHETIC
-   =========================== */
 :root{
-  --bg:#050202;
-  --panel:#0e0d0f;
-  --accent:#66ffcc;
-  --accent-2:#ff6b6b;
-  --warn:#ffb86b;
-  --text:#dcdcdc;
-  --crt-glow: rgba(100,255,180,0.06);
+  --bg:#050202; --panel:#0e0d0f; --accent:#66ffcc; --accent-2:#ff6b6b; --warn:#ffb86b; --text:#dcdcdc;
 }
 html,body{height:100%;margin:0;background:#050202;font-family: "Courier New", monospace;color:var(--text);overflow:hidden;}
 .background-fixed{position:fixed; inset:0; background-image:url('retro-bg.jpg'); background-size:cover; background-position:center; filter:brightness(.25) contrast(1.1); z-index:-10;}
-
-/* SCANLINES / CRT */
-.crt-overlay{
-  position:fixed; inset:0; pointer-events:none; mix-blend-mode:overlay; z-index:1200;
-  background-image: linear-gradient(rgba(0,0,0,0) 49%, rgba(0,0,0,0.05) 50%, rgba(0,0,0,0) 51%);
-  background-size: 100% 4px;
-  animation: subtleFlicker 6s steps(2) infinite;
-}
+.crt-overlay{position:fixed; inset:0; pointer-events:none; mix-blend-mode:overlay; z-index:1200; background-image: linear-gradient(rgba(0,0,0,0) 49%, rgba(0,0,0,0.05) 50%, rgba(0,0,0,0) 51%); background-size: 100% 4px; animation: subtleFlicker 6s steps(2) infinite;}
 @keyframes subtleFlicker { 0%{opacity:.98}50%{opacity:.92}100%{opacity:.98} }
-
-/* VHS noise */
-.vhs-noise{
-  position:fixed; inset:0; pointer-events:none; z-index:1190; background:transparent;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><filter id="g"><feTurbulence baseFrequency="0.9" numOctaves="1" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(%23g)" opacity="0.02" fill="white"/></svg>');
-  mix-blend-mode:screen; opacity:0.08;
-  animation: noiseJitter 1.2s steps(2) infinite;
-}
+.vhs-noise{position:fixed; inset:0; pointer-events:none; z-index:1190; background:transparent; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><filter id="g"><feTurbulence baseFrequency="0.9" numOctaves="1" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(%23g)" opacity="0.02" fill="white"/></svg>'); mix-blend-mode:screen; opacity:0.08; animation: noiseJitter 1.2s steps(2) infinite;}
 @keyframes noiseJitter { 0%{transform:translateY(0)}50%{transform:translateY(1px)}100%{transform:translateY(0)} }
-
-/* GLITCH title */
-.glitch {
-  position:relative; display:inline-block; color:var(--warn);
-  text-transform:uppercase; letter-spacing:3px; font-weight:700;
-}
-.glitch::before, .glitch::after{
-  content:attr(data-text);
-  position:absolute; left:0; top:0; width:100%;
-  clip:rect(0,900px,0,0);
-}
+.glitch { position:relative; display:inline-block; color:var(--warn); text-transform:uppercase; letter-spacing:3px; font-weight:700;}
+.glitch::before, .glitch::after{ content:attr(data-text); position:absolute; left:0; top:0; width:100%; clip:rect(0,900px,0,0);}
 .glitch::before{ left:2px; text-shadow:-2px 0 var(--accent); animation:glitchTop .8s infinite linear; }
 .glitch::after{ left:-2px; text-shadow:2px 0 var(--accent-2); animation:glitchBottom .9s infinite linear; }
 @keyframes glitchTop { 0%{clip:rect(0,900px,10px,0)} 50%{clip:rect(0,900px,45px,0)} 100%{clip:rect(0,900px,10px,0)} }
 @keyframes glitchBottom { 0%{clip:rect(40px,900px,90px,0)} 50%{clip:rect(20px,900px,60px,0)} 100%{clip:rect(40px,900px,90px,0)} }
 
-/* SCREEN CONTAINER */
-.app {
-  position:relative;
-  width: 100vw;
-  height: 100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:28px;
-  box-sizing:border-box;
-}
-
-/* CORE CARD (center) */
-.center-card{
-  width: 92%;
-  max-width: 1100px;
-  min-height: 540px;
-  background: linear-gradient(180deg, rgba(10,10,12,0.9), rgba(4,4,6,0.98));
-  border-radius:10px; padding:18px; box-shadow: 0 12px 60px rgba(0,0,0,0.8); border:1px solid rgba(255,255,255,0.03);
-  display:flex; gap:14px; flex-direction:column; z-index:100;
-  position:relative; overflow:hidden;
-}
-
-/* TOP: header like arcade */
-.header {
-  display:flex; justify-content:space-between; align-items:center; gap:12px;
-  font-size:0.95rem; color:#bbb;
-}
+.app { position:relative; width:100vw; height:100vh; display:flex; align-items:center; justify-content:center; padding:28px; box-sizing:border-box; }
+.center-card{ width:92%; max-width:1100px; min-height:540px; background: linear-gradient(180deg, rgba(10,10,12,0.9), rgba(4,4,6,0.98)); border-radius:10px; padding:18px; box-shadow: 0 12px 60px rgba(0,0,0,0.8); border:1px solid rgba(255,255,255,0.03); display:flex; gap:14px; flex-direction:column; z-index:100; position:relative; overflow:hidden; }
+.header { display:flex; justify-content:space-between; align-items:center; gap:12px; font-size:0.95rem; color:#bbb; }
 .header-left{ display:flex; gap:12px; align-items:center; }
 .hud-pill{ background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.05)); padding:6px 12px; border-radius:999px; border:1px solid rgba(255,255,255,0.03); color:#ddd; font-weight:700; display:flex; gap:8px; align-items:center; }
 
-/* CONTENT AREA */
-.content {
-  display:flex; gap:14px; align-items:flex-start; flex:1;
-}
-/* LEFT: story & choices */
-.panel {
-  flex: 1.6;
-  background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.05));
-  border-radius:6px; padding:14px; min-height: 380px; border:1px solid rgba(255,255,255,0.02);
-  position:relative; overflow:auto;
-}
+.content { display:flex; gap:14px; align-items:flex-start; flex:1; }
+.panel { flex:1.6; background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.05)); border-radius:6px; padding:14px; min-height:380px; border:1px solid rgba(255,255,255,0.02); position:relative; overflow:auto; }
 .title-bar { display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:10px; }
 .title-bar h2{ margin:0; font-size:1.05rem; color:var(--warn); text-transform:uppercase; letter-spacing:2px; }
 .story-text{ white-space:pre-wrap; font-size:1.05rem; line-height:1.5; color:#e6e6e6; min-height:160px; }
 
-/* COMMAND/CHOICES */
 .choices { margin-top:14px; display:flex; flex-direction:column; gap:10px; }
-.choice-btn{
-  background:transparent; border:2px solid rgba(255,255,255,0.06); padding:12px; border-radius:8px; color:var(--text);
-  text-align:left; font-size:1.02rem; cursor:pointer; transition:.12s all; display:flex; justify-content:space-between; align-items:center;
-}
+.choice-btn{ background:transparent; border:2px solid rgba(255,255,255,0.06); padding:12px; border-radius:8px; color:var(--text); text-align:left; font-size:1.02rem; cursor:pointer; transition:.12s all; display:flex; justify-content:space-between; align-items:center; }
 .choice-btn:hover{ transform:translateX(6px); box-shadow: 0 10px 30px rgba(0,0,0,0.6); border-color: rgba(255,255,255,0.12); }
 .choice-meta{ font-size:0.85rem; color:#bdbdbd; }
 
-/* RIGHT: management panel (now center-bottom style, not patient list) */
-.panel-right {
-  flex: .9;
-  background: linear-gradient(180deg, rgba(8,8,10,0.85), rgba(3,3,4,0.95));
-  border-radius:6px; padding:12px; border:1px solid rgba(255,255,255,0.03);
-  min-width: 280px; max-height: 430px; overflow:auto;
-}
+.panel-right { flex:.9; background: linear-gradient(180deg, rgba(8,8,10,0.85), rgba(3,3,4,0.95)); border-radius:6px; padding:12px; border:1px solid rgba(255,255,255,0.03); min-width:280px; max-height:430px; overflow:auto; }
 .panel-right h3{ margin:0 0 8px 0; color:var(--accent); text-transform:uppercase; font-size:0.95rem; letter-spacing:1px; }
 
-/* CRISIS METER */
 .crisis-meter { height:28px; background:rgba(255,255,255,0.03); border-radius:6px; overflow:hidden; border:1px solid rgba(255,255,255,0.03); display:flex; }
 .crisis-fill { height:100%; width:10%; background: linear-gradient(90deg, #66ff88, #ffcc00, #ff6666); transition: width .6s cubic-bezier(.2,.9,.2,1); box-shadow: inset 0 -4px 12px rgba(0,0,0,0.4); }
 
-/* TIMELINE (log) */
 .timeline{ margin-top:12px; background:rgba(0,0,0,0.2); border-radius:6px; padding:8px; font-size:0.9rem; color:#ccc; max-height:160px; overflow:auto; border:1px dashed rgba(255,255,255,0.02); }
 .timeline-item{ padding:6px 8px; border-bottom:1px solid rgba(255,255,255,0.02); display:flex; justify-content:space-between; align-items:center; gap:8px; }
 
-/* retro pixel-ish small UI */
-.pixel {
-  font-family: "Courier New", monospace;
-  letter-spacing:1px;
-  text-shadow: 0 0 6px rgba(0,255,150,0.05);
-}
-
-/* cinematic vignette */
-.vignette{
-  position:absolute; inset:0; pointer-events:none; border-radius:10px;
-  box-shadow: inset 0 0 200px rgba(0,0,0,0.7);
-  z-index:40;
-}
-
-/* flicker effect when crisis spikes */
-.flicker {
-  animation:flickerAnim .9s linear infinite;
-}
-@keyframes flickerAnim {
-  0%{opacity:1} 5%{opacity:.5} 10%{opacity:1} 15%{opacity:.6} 20%{opacity:1} 100%{opacity:1}
-}
-
-/* small UI helpers */
+.pixel { font-family: "Courier New", monospace; letter-spacing:1px; text-shadow: 0 0 6px rgba(0,255,150,0.05); }
+.vignette{ position:absolute; inset:0; pointer-events:none; border-radius:10px; box-shadow: inset 0 0 200px rgba(0,0,0,0.7); z-index:40; }
+.flicker { animation:flickerAnim .9s linear infinite; }
+@keyframes flickerAnim { 0%{opacity:1} 5%{opacity:.5} 10%{opacity:1} 15%{opacity:.6} 20%{opacity:1} 100%{opacity:1} }
 .small-muted{ font-size:0.85rem; color:#aaa; }
 .btn-ghost{ background:transparent; border:1px solid rgba(255,255,255,0.06); padding:8px 10px; border-radius:6px; color:#ddd; cursor:pointer; }
 .footer-note{ font-size:0.8rem; color:#999; margin-top:6px; }
-
-/* accessibility focus */
 .choice-btn:focus, .btn-ghost:focus { outline: 3px solid rgba(102,255,204,0.12); }
+@media (max-width:1000px){ .content{ flex-direction:column; } .panel-right{ max-width:100%; width:100%; } .center-card{ max-width:95%; min-height:620px; } }
 
-/* responsive */
-@media (max-width:1000px){
-  .content{ flex-direction:column; }
-  .panel-right{ max-width:100%; width:100%;}
-  .center-card{ max-width:95%; min-height:620px; }
+/* --- ADICIONADO: Start overlay styles --- */
+#start-overlay {
+  position:fixed; inset:0; display:flex; align-items:center; justify-content:center; z-index:2000;
+  background: linear-gradient(180deg, rgba(0,0,0,0.7), rgba(0,0,0,0.85));
 }
+.start-box {
+  width: 520px; max-width:90%; background:rgba(8,8,10,0.96); border:1px solid rgba(255,255,255,0.04); padding:28px; border-radius:8px;
+  text-align:center; box-shadow: 0 20px 80px rgba(0,0,0,0.8);
+}
+#btn-start {
+  margin-top:18px; padding:14px 28px; font-size:1.3rem; border-radius:8px; cursor:pointer;
+  background: linear-gradient(90deg, #ff6b6b, #ffcc66); border:none; color:#031010; font-weight:800;
+  box-shadow: 0 8px 24px rgba(255,120,80,0.12);
+}
+#btn-start:focus { outline: 3px solid rgba(255,200,120,0.18); }
 </style>
 </head>
 <body>
@@ -168,7 +79,16 @@ html,body{height:100%;margin:0;background:#050202;font-family: "Courier New", mo
   <div class="crt-overlay" aria-hidden="true"></div>
   <div class="vhs-noise" aria-hidden="true"></div>
 
-  <div class="app" role="application">
+  <!-- --- ADICIONADO: Start overlay (inicial) --- -->
+  <div id="start-overlay" role="dialog" aria-modal="true" aria-label="Iniciar Simulação">
+    <div class="start-box">
+      <h1 class="glitch" data-text="INICIAR SIMULAÇÃO">INICIAR SIMULAÇÃO</h1>
+      <p style="color:#ccc; margin-top:12px">Modo: Gerenciamento de crise — visualize timeline, aloque equipes e contenha surtos. Use teclado: 1 / 2 / 3 para escolhas rápidas.</p>
+      <button id="btn-start" aria-label="Iniciar simulação" tabindex="0">► INICIAR</button>
+    </div>
+  </div>
+
+  <div class="app" role="application" aria-hidden="false">
     <div class="center-card" role="region" aria-label="Simulação de Gestão de Desastre">
       <div class="header">
         <div class="header-left">
@@ -182,23 +102,19 @@ html,body{height:100%;margin:0;background:#050202;font-family: "Courier New", mo
       </div>
 
       <div class="content">
-        <!-- LEFT: story & choices -->
         <div class="panel" id="panel-main" role="main" aria-live="polite">
           <div class="title-bar">
             <h2 id="scene-title" class="pixel">COORDENAÇÃO MÉDICA</h2>
             <div class="small-muted">Modo: <strong id="game-mode">Gerenciamento</strong></div>
           </div>
 
-          <div class="story-text" id="story-text" tabindex="0">Prepare-se — a simulação começará quando você iniciar.</div>
+          <div class="story-text" id="story-text" tabindex="0">A simulação aguarda início.</div>
 
-          <div class="choices" id="choices-container" role="list">
-            <!-- Buttons rendered dynamically -->
-          </div>
+          <div class="choices" id="choices-container" role="list"></div>
 
           <div class="footer-note">Dica: use teclado (Tab + Enter) para acessar opções rapidamente.</div>
         </div>
 
-        <!-- RIGHT: management & crisis -->
         <aside class="panel-right" role="complementary" aria-label="Painel de Gestão">
           <h3>PAINEL DE CONTROLE</h3>
 
@@ -222,9 +138,7 @@ html,body{height:100%;margin:0;background:#050202;font-family: "Courier New", mo
 
           <div style="margin-top:12px">
             <div class="small-muted">Timeline de Eventos</div>
-            <div class="timeline" id="timeline" aria-live="polite">
-              <!-- events -->
-            </div>
+            <div class="timeline" id="timeline" aria-live="polite"></div>
           </div>
 
           <div style="margin-top:12px">
@@ -241,22 +155,17 @@ html,body{height:100%;margin:0;background:#050202;font-family: "Courier New", mo
     </div>
   </div>
 
-  <!-- Audio placeholders (substitua pelas suas trilhas) -->
+  <!-- audio placeholders -->
   <audio id="sfx-alert" src="sfx_alert.mp3" preload="auto"></audio>
   <audio id="sfx-glitch" src="sfx_glitch.mp3" preload="auto"></audio>
   <audio id="bg-ambience" src="bg_ambience_loop.mp3" preload="auto" loop></audio>
 
 <script>
-/* =============================================================
-   Motor de simulação: eventos, decisões de gerenciamento, UI FX
-   ============================================================= */
-
 /* DOM refs */
 const storyText = document.getElementById('story-text');
 const choicesContainer = document.getElementById('choices-container');
 const sceneTitle = document.getElementById('scene-title');
 const crisisFill = document.getElementById('crisis-fill');
-const crisisMeter = document.getElementById('crisis-meter');
 const timelineEl = document.getElementById('timeline');
 const simTimeEl = document.getElementById('sim-time');
 const teamsEl = document.getElementById('teams-available');
@@ -269,26 +178,19 @@ const sfxAlert = document.getElementById('sfx-alert');
 const sfxGlitch = document.getElementById('sfx-glitch');
 const bgAmbience = document.getElementById('bg-ambience');
 
-/* estado da simulação */
+const startOverlay = document.getElementById('start-overlay');
+const btnStart = document.getElementById('btn-start');
+
+/* estado */
 let teamsAvailable = 10;
 let crisisValue = 10; // 0-100
-let simTime = 6*60 + 5; // minutos desde 00:00 -> 06:05
-let decisionTimer = null;
-let decisionCountdown = 0;
-let currentScene = 'start';
+let simTime = 6*60 + 5; // minutes from midnight
+let eventInterval = null;
+let started = false;
 let commsWorking = true;
 let weather = 'Chuva';
-let eventInterval = null;
 
-/* inicial */
-teamsEl.innerText = teamsAvailable;
-updateCrisisMeter(0);
-weatherEl.innerText = 'Tempo: ' + weather;
-commStateEl.innerText = 'Rádio: ' + (commsWorking ? 'Ativo' : 'Falho');
-bgAmbience.volume = 0.15;
-try{ bgAmbience.play().catch(()=>{}); }catch(e){ /* autoplay blocked */ }
-
-/* story scenes (mais focadas em gestão) */
+/* scenes (mesma estrutura anterior, reduzido aqui por brevidade) */
 const scenes = {
   start: {
     title: 'COORDENAÇÃO MÉDICA',
@@ -296,90 +198,215 @@ const scenes = {
     choices: [
       { text: 'A: Enviar 6 equipes imediatamente para Zona de Impacto (Foco no resgate)', action: ()=> allocateTeams(6,'impact') },
       { text: 'B: Manter 4 equipes em campo e 6 no Posto de Comando (Gestão centralizada)', action: ()=> allocateTeams(4,'balanced') },
-      { text: 'C: Destinar equipes para avaliação de abrigos e logística de água (Prevenção)', action: ()=> allocateTeams(3,'prevention') }
+      { text: 'C: Destinar equipes para avaliação de abrigos e logística (Prevenção)', action: ()=> allocateTeams(3,'prevention') }
     ]
   },
   impact_consequences: {
     title: 'ZONA DE IMPACTO',
     text: "[08:00] Ação direta nos feridos salvou vidas. Porém, 18 horas depois, abrigos sem atenção apresentam surtos. O Crisis Meter aumenta.",
     choices: [
-      { text: 'Prosseguir em resgate (manter presença)', action: ()=> { addTimeline('Mantém resgate — prevenção enfraquecida.'); changeCrisis(12); goTo('mid_crisis'); } },
-      { text: 'Recolocar equipes para prevenção (redirigir 50%)', action: ()=> { addTimeline('Redistribuiu equipes para abrigos — prevenção emergente.'); changeCrisis(-10); goTo('mid_crisis'); } }
+      { text: 'Prosseguir em resgate (manter presença)', action: ()=> { addTimeline('Mantém resgate — prevenção enfraquecida.'); changeCrisis(12); renderScene('mid_crisis'); } },
+      { text: 'Recolocar equipes para prevenção (redirigir 50%)', action: ()=> { addTimeline('Redistribuiu equipes para abrigos — prevenção emergente.'); changeCrisis(-10); renderScene('mid_crisis'); } }
     ]
   },
   balanced_path: {
     title: 'POSTO DE COMANDO',
     text: "[07:30] Sua gestão equilibrou recursos. Equipes informam áreas críticas — há risco de leptospirose em 2 abrigos e possibilidade de incêndio em 1 setor devido a curto-circuito.",
     choices: [
-      { text: 'Enviar 2 equipes para abrigos agora', action: ()=> { addTimeline('Equipe enviada para abrigos.'); changeCrisis(-6); goTo('mid_crisis'); } },
-      { text: 'Priorizar curto-circuito (incêndio)', action: ()=> { addTimeline('Prioridade: Incêndio. Evacuação imediata.'); changeCrisis(8); goTo('mid_crisis'); } },
-      { text: 'Pedir apoio externo (Defesa Civil) e coordenar logística', action: ()=> { addTimeline('Solicitado apoio externo.'); changeCrisis(-4); goTo('waiting_support'); } }
+      { text: 'Enviar 2 equipes para abrigos agora', action: ()=> { addTimeline('Equipe enviada para abrigos.'); changeCrisis(-6); renderScene('mid_crisis'); } },
+      { text: 'Priorizar curto-circuito (incêndio)', action: ()=> { addTimeline('Prioridade: Incêndio. Evacuação imediata.'); changeCrisis(8); renderScene('mid_crisis'); } },
+      { text: 'Pedir apoio externo (Defesa Civil) e coordenar logística', action: ()=> { addTimeline('Solicitado apoio externo.'); changeCrisis(-4); renderScene('waiting_support'); } }
     ]
   },
   prevention_path: {
     title:'AVALIAÇÃO DOS ABRIGOS',
     text: "[06:50] A atenção precoce aos abrigos reduziu risco de surtos, mas a zona de impacto ficou sem equipes suficientes para atender vítimas graves. Há críticas na mídia e pressão política.",
     choices: [
-      { text:'Manter foco em prevenção (continuar)', action: ()=> { addTimeline('Continuou prevenção — impacto clínico parcialmente afetado.'); changeCrisis(-6); goTo('mid_crisis'); } },
-      { text:'Realocar 2 equipes para resgate imediato', action: ()=> { addTimeline('Realocou equipes para resgate.'); changeCrisis(4); goTo('mid_crisis'); } }
+      { text:'Manter foco em prevenção (continuar)', action: ()=> { addTimeline('Continuou prevenção — impacto clínico parcialmente afetado.'); changeCrisis(-6); renderScene('mid_crisis'); } },
+      { text:'Realocar 2 equipes para resgate imediato', action: ()=> { addTimeline('Realocou equipes para resgate.'); changeCrisis(4); renderScene('mid_crisis'); } }
     ]
   },
   waiting_support: {
     title:'APOIO EXTERNO',
     text: "[09:00] Defesa Civil responde apenas parcialmente. O tempo de resposta é maior que o previsto. Comunicação instável.",
     choices: [
-      { text:'Ir pessoalmente ao QG da Defesa Civil', action: ()=> { addTimeline('Deslocou-se ao QG — articulação rápida.'); changeCrisis(-8); goTo('vitoria') } },
-      { text:'Insistir por rádio e manter postura protocular', action: ()=> { addTimeline('Aguardando resposta — atraso crítico.'); changeCrisis(10); goTo('erro_burocracia') } }
+      { text:'Ir pessoalmente ao QG da Defesa Civil', action: ()=> { addTimeline('Deslocou-se ao QG — articulação rápida.'); changeCrisis(-8); renderScene('vitoria'); } },
+      { text:'Insistir por rádio e manter postura protocular', action: ()=> { addTimeline('Aguardando resposta — atraso crítico.'); changeCrisis(10); renderScene('erro_burocracia'); } }
     ]
   },
   mid_crisis: {
     title:'ESCALADA DA CRISE',
-    text: "[12:00] Eventos secundários começam a ocorrer: chuva intensa, estradas bloqueadas, aumento de casos em abrigos. Você precisa priorizar comunicações, logística ou ações clínicas.",
+    text: "[12:00] Eventos secundários: chuva intensa, estradas bloqueadas e aumento de casos. Priorize comunicações, logística ou ações clínicas.",
     choices: [
-      { text:'Focar em restaurar comunicações e coordenação', action: ()=> { restoreComms(); addTimeline('Tentativa de restauração das comunicações.'); changeCrisis(-5); goTo('mid_crisis_follow'); } },
-      { text:'Fortalecer logística (caminhões-pipa, insumos)', action: ()=> { addTimeline('Reforço logístico solicitado.'); changeCrisis(-7); goTo('mid_crisis_follow'); } },
-      { text:'Enviar equipes para manejo clinico (IRA, intoxicações)', action: ()=> { addTimeline('Equipes enviadas para casos críticos.'); changeCrisis(3); goTo('mid_crisis_follow'); } }
+      { text:'Restaurar comunicações e coordenação', action: ()=> { restoreComms(); addTimeline('Tentativa de restauração das comunicações.'); changeCrisis(-5); renderScene('mid_crisis_follow'); } },
+      { text:'Fortalecer logística (caminhões-pipa, insumos)', action: ()=> { addTimeline('Reforço logístico solicitado.'); changeCrisis(-7); renderScene('mid_crisis_follow'); } },
+      { text:'Enviar equipes para manejo clínico (IRA, intoxicações)', action: ()=> { addTimeline('Equipes enviadas para casos críticos.'); changeCrisis(3); renderScene('mid_crisis_follow'); } }
     ]
   },
   mid_crisis_follow: {
     title:'AÇÕES EM CURSO',
     text: "[14:00] Avaliação em andamento. As decisões agora determinam se a crise será contida ou evoluirá para surto em massa.",
     choices: [
-      { text:'Monitorar e ajustar (Aguardar 30min)', action: ()=> { addTimeline('Monitoramento ativo.'); changeCrisis(-2); goTo('debrief') } },
-      { text:'Executar ação agressiva (risco político/ético)', action: ()=> { addTimeline('Ação agressiva executada — impacto misto.'); changeCrisis(6); goTo('debrief') } }
+      { text:'Monitorar e ajustar (Aguardar 30min)', action: ()=> { addTimeline('Monitoramento ativo.'); changeCrisis(-2); renderScene('debrief'); } },
+      { text:'Executar ação agressiva (risco político/ético)', action: ()=> { addTimeline('Ação agressiva executada — impacto misto.'); changeCrisis(6); renderScene('debrief'); } }
     ]
   },
   erro_burocracia: {
     title:'FALHA DE ARTICULAÇÃO',
     text: "[15:00] A espera burocrática comprometeu ações preventivas. Surtos aparecendo nos abrigos. O Crisis Meter dispara.",
     choices:[
-      { text:'Tentar recuperar perdas (reallocar todas equipes)', action: ()=> { addTimeline('Reallocação massiva.'); changeCrisis(2); goTo('debrief') } },
-      { text:'Reiniciar simulação', action: ()=> { resetSim(); } }
+      { text:'Tentar recuperar perdas (reallocar todas equipes)', action: ()=> { addTimeline('Reallocação massiva.'); changeCrisis(2); renderScene('debrief'); } },
+      { text:'Reiniciar simulação', action: ()=> { resetSim(); hideStartOverlay(); } }
     ]
   },
   vitoria: {
     title:'PLANO CONJUNTO',
     text: "[11:30] A articulação com defesa civil funcionou. Caminhão-pipa enviado, abrigo reorganizado, surtos evitados. Crise controlada.",
     choices: [
-      { text:'Encerrar e Debrief', action: ()=> { addTimeline('Solução conjunta — missão bem-sucedida.'); changeCrisis(-20); goTo('debrief'); } }
+      { text:'Encerrar e Debrief', action: ()=> { addTimeline('Solução conjunta — missão bem-sucedida.'); changeCrisis(-20); renderScene('debrief'); } }
     ]
   },
   debrief: {
     title:'DEBRIEF',
-    text: "Resumo: Avaliação das decisões e explicações fisiológicas.\n\n- Síndrome do esmagamento: liberação de mioglobina → risco de IRA e hiperpotassemia. \n- Intoxicação por CO: competição com O₂ pela hemoglobina → hipóxia tecidual.\n\nConsidere rever prioridades entre prevenção e resposta imediata.",
+    text: "Resumo: Avaliação das decisões e explicações fisiológicas.\n\n- Síndrome do esmagamento: liberação de mioglobina → risco de IRA e hiperpotassemia.\n- Intoxicação por CO: competição com O₂ pela hemoglobina → hipóxia tecidual.\n\nReveja prioridades entre prevenção e resposta imediata.",
     choices:[
-      { text:'Reiniciar Simulação', action: ()=> resetSim() }
+      { text:'Reiniciar Simulação', action: ()=> { resetSim(); hideStartOverlay(); } }
     ]
   }
 };
 
 /* render choices */
-function renderScene(sceneKey){
-  currentScene = sceneKey;
-  const scene = scenes[sceneKey];
+function renderScene(key){
+  const scene = scenes[key];
   if(!scene) return;
   sceneTitle.innerText = scene.title;
   storyText.innerText = scene.text;
   choicesContainer.innerHTML = '';
   scene.choices.forEach((c, idx) => {
-    const btn = document.createEl
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.innerHTML = `<span>${c.text}</span><span class="choice-meta">[Enter]</span>`;
+    btn.onclick = ()=> { c.action(); };
+    btn.onkeydown = (e)=> { if(e.key==='Enter'||e.key===' '){ e.preventDefault(); c.action(); } };
+    choicesContainer.appendChild(btn);
+  });
+}
+
+/* crisis meter and UI */
+function updateCrisisMeter(){
+  crisisFill.style.width = crisisValue + '%';
+  document.getElementById('crisis-meter').setAttribute('aria-valuenow', crisisValue);
+  if(crisisValue > 70){ crisisFill.classList.add('flicker'); alertLevelEl.innerText='Crítico'; alertLevelEl.style.color='#ff6666'; triggerSFX('alert'); }
+  else if(crisisValue > 35){ crisisFill.classList.remove('flicker'); alertLevelEl.innerText='Alerta'; alertLevelEl.style.color='#ffb86b'; }
+  else { crisisFill.classList.remove('flicker'); alertLevelEl.innerText='Moderado'; alertLevelEl.style.color='#66ffcc'; }
+}
+function changeCrisis(delta){
+  crisisValue = Math.max(0, Math.min(100, crisisValue + delta));
+  updateCrisisMeter();
+  addTimeline(`Crisis ${delta>0?'+':''}${delta}`);
+}
+
+/* timeline */
+function addTimeline(msg){
+  const timeLabel = formatTime(simTime);
+  const node = document.createElement('div');
+  node.className = 'timeline-item';
+  node.innerHTML = `<div>${timeLabel} — ${msg}</div><div class="small-muted">sim</div>`;
+  timelineEl.prepend(node);
+}
+
+/* format time */
+function formatTime(mins){ const h=Math.floor(mins/60).toString().padStart(2,'0'); const m=(mins%60).toString().padStart(2,'0'); return `${h}:${m}`; }
+
+/* actions */
+function allocateTeams(n, mode){
+  addTimeline(`Alocou ${n} equipes (${mode})`);
+  teamsAvailable = Math.max(0, teamsAvailable - n);
+  teamsEl.innerText = teamsAvailable;
+  if(mode==='impact'){ changeCrisis(-8); setTimeout(()=>{ changeCrisis(10); addTimeline('Consequência: abrigos sem atenção.'); renderScene('impact_consequences'); }, 4000); renderScene('impact_consequences'); }
+  else if(mode==='balanced'){ changeCrisis(-3); renderScene('balanced_path'); }
+  else if(mode==='prevention'){ changeCrisis(-6); renderScene('prevention_path'); }
+}
+
+/* comms */
+function restoreComms(){
+  // small success probability depending on crisis
+  if(crisisValue > 65 && Math.random() < 0.6){ commsWorking=false; commStateEl.innerText='Rádio: Falho'; addTimeline('Tentativa falhou — equipamento danificado'); changeCrisis(8); triggerSFX('glitch'); }
+  else { commsWorking=true; commStateEl.innerText='Rádio: Ativo'; addTimeline('Comunicações restauradas'); triggerSFX('glitch'); changeCrisis(-5); }
+}
+
+/* sfx */
+function triggerSFX(which){
+  try{
+    if(which==='alert'){ sfxAlert.currentTime=0; sfxAlert.volume=0.9; sfxAlert.play().catch(()=>{}); }
+    if(which==='glitch'){ sfxGlitch.currentTime=0; sfxGlitch.volume=0.6; sfxGlitch.play().catch(()=>{}); }
+  }catch(e){}
+}
+
+/* reset sim (does NOT automatically start overlay) */
+function resetSim(){
+  teamsAvailable = 10; teamsEl.innerText = teamsAvailable;
+  crisisValue = 10; updateCrisisMeter();
+  simTime = 6*60 + 5; simTimeEl.innerText = formatTime(simTime);
+  timelineEl.innerHTML = '';
+  renderScene('start');
+  addTimeline('Simulação reiniciada.');
+}
+
+/* event loop (starts only after user presses START) */
+let eventInterval = null;
+function startEventLoop(){
+  if(eventInterval) clearInterval(eventInterval);
+  eventInterval = setInterval(()=> {
+    const r = Math.random();
+    if(r < 0.12){ changeCrisis(12); addTimeline('Evento: Chuva torrencial intensificou deslizamentos.'); triggerSFX('alert'); flashPanel(); }
+    else if(r < 0.30){ changeCrisis(6); addTimeline('Evento: Estrada bloqueada — atraso logístico.'); triggerSFX('glitch'); flashPanel(); }
+    else if(r < 0.45){ changeCrisis(-4); addTimeline('Boa: Doação de água e alimentos chegou.'); }
+  }, 12000);
+}
+function flashPanel(){ const p=document.querySelector('.center-card'); p.style.boxShadow='0 0 120px rgba(255,80,80,0.14)'; setTimeout(()=>{ p.style.boxShadow='0 12px 60px rgba(0,0,0,0.8)'; },800); }
+
+/* top buttons */
+document.getElementById('btn-allocate').addEventListener('click', ()=> {
+  const n = parseInt(prompt('Quantas equipes deseja enviar? (ex: 2)')||'0');
+  if(Number.isInteger(n) && n>0) allocateTeams(n,'manual');
+});
+document.getElementById('btn-logistics').addEventListener('click', ()=> { addTimeline('Escolheu prioridade: Logística.'); changeCrisis(-6); });
+document.getElementById('btn-comm').addEventListener('click', ()=> { restoreComms(); });
+
+/* keyboard shortcuts */
+window.addEventListener('keydown', (e)=>{
+  if(!started) return; // só aceitar atalho após start
+  if(e.key === '1') document.querySelectorAll('.choice-btn')[0]?.click();
+  if(e.key === '2') document.querySelectorAll('.choice-btn')[1]?.click();
+  if(e.key === '3') document.querySelectorAll('.choice-btn')[2]?.click();
+  if(e.key === 'r') { resetSim(); hideStartOverlay(); }
+});
+
+/* --- ADICIONADO: start button handler --- */
+function hideStartOverlay(){ startOverlay.style.display='none'; startOverlay.setAttribute('aria-hidden','true'); }
+btnStart.addEventListener('click', ()=> {
+  // mark started
+  started = true;
+  hideStartOverlay();
+  // start ambience and event loop (user interaction allows audio)
+  try{ bgAmbience.volume = 0.15; bgAmbience.play().catch(()=>{}); }catch(e){}
+  startEventLoop();
+  // initialize sim
+  resetSim();
+});
+
+/* small simulated time progression */
+setInterval(()=> {
+  if(!started) return;
+  simTime += 20; // accelerate simulation time
+  simTimeEl.innerText = formatTime(simTime);
+}, 1000);
+
+/* initial render (but simulation not active until start is pressed) */
+storyText.innerText = "Pressione INICIAR para começar a simulação.\n\nDica: após iniciar, use 1/2/3 para escolher rapidamente.";
+choicesContainer.innerHTML = '<div style="opacity:.6; font-size:.95rem; margin-top:12px">Aguardando início...</div>';
+
+</script>
+</body>
+</html>
